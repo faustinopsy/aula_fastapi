@@ -1,11 +1,12 @@
 from fastapi import APIRouter
 from typing import Union
+from controllers.ola_controller import ola_mundo
 
 router = APIRouter()
 
 @router.get("/")
 def read_root():
-    return {"message": "Olá, mundo com FastAPI!"}
+    return ola_mundo()
 
 @router.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
