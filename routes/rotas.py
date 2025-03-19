@@ -1,8 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from typing import Union
 from controllers.ola_controller import ola_mundo
+from controllers.responde_html import primeira_pagina
 
 router = APIRouter()
+
+@router.get("/view", response_model=None)
+async def chama_template(request: Request):
+    return primeira_pagina(request)
 
 @router.get("/")
 def read_root():
