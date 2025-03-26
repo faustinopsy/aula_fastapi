@@ -1,30 +1,26 @@
 from fastapi import APIRouter, Request
-from typing import Union
-from controllers.ola_controller import ola_mundo
-from controllers.responde_html import primeira_pagina
+from controllers import user_controller
 
 router = APIRouter()
 
-@router.get("/view", response_model=None)
-async def chama_template(request: Request):
-    return primeira_pagina(request)
-
 @router.get("/")
-def read_root():
-    return ola_mundo()
+def pagina_inicial(request: Request):
+    return user_controller.mostrar_usuarios(request)
 
-@router.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@router.post("/usuarios")
+async def cadastrar(request: Request):
+    form = await request.form()
+    return await user_controller.cadastrar_usuario(request, nome=form["nome"], email=form["email"])
 
-@router.post("/items")
-async def create_item(item: dict):
-    return {"message": "Recurso criado", "item": item}
+@router.get("/usuarios/delete/{user_id}")
+def deletar(user_id: int):
+    return user_controller.excluir_usuario(user_id)
 
-@router.put("/items/{item_id}")
-async def update_item(item_id: int, item: dict):
-    return {"message": f"Recurso {item_id} atualizado", "item": item}
+@router.get("/usuarios/edit/{user_id}")
+def editar_usuario(request: Request, user_id: int):
+    return user_controller.mostrar_edicao(request, user_id)
 
-@router.delete("/items/{item_id}")
-async def delete_item(item_id: int):
-    return {"message": f"Recurso {item_id} removido"}
+@router.post("/usuarios/update/{user_id}")
+async def atualizar(request: Request, user_id: int):
+    form = await request.form()
+    return await user_controller.atualizar_usuario(request, user_id, nome=form["nome"], email=form["email"])

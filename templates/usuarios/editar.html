@@ -1,0 +1,8 @@
+<main>    
+    <h1>Editar Usuário</h1>
+    <form method="post" action="/usuarios/update/{{ usuario[0] }}">
+        <input type="text" name="nome" value="{{ usuario[1] }}" required>
+        <input type="email" name="email" value="{{ usuario[2] }}" required>
+        <button type="submit">Atualizar</button>
+    </form>
+</main>
